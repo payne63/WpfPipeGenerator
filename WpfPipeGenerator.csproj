@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ApplicationIcon>Image\pipe.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;WPF</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE;WPF</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="AddSelectionCut.xaml.cs" />
+    <Compile Remove="CutDraw.xaml.cs" />
+    <Compile Remove="DebitData.cs" />
+    <Compile Remove="HorizontalAxis.cs" />
+    <Compile Remove="HorizontalAxisBase.cs" />
+    <Compile Remove="PipeCuts.cs" />
+    <Compile Remove="Test.cs" />
+    <Compile Remove="TestViewModel.cs" />
+    <Compile Remove="UserControlTest.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Maison.mtl" />
+    <None Remove="Maison.obj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="AddSelectionCut.xaml" />
+    <Page Remove="CutDraw.xaml" />
+    <Page Remove="UserControlTest.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Image\pipe.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentWPF.Core.Alpha" Version="1.0.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.2.1" />
+    <PackageReference Include="MvvmLight" Version="5.4.1.1" />
+    <PackageReference Include="PdfSharpCore" Version="1.3.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PipeCalculator">
+      <HintPath>dll\PipeCalculator.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="dll\PipeCalculator.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>
