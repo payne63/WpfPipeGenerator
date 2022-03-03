@@ -1,3 +1,5 @@
 # WpfPipeGenerator
 
-Logiciel pour préparer une feuille de débit de tube et permettre également les quantités de longueur nécessaire à approvisionner
+Logiciel pour prÃ©parer une feuille de dÃ©bit de tube et permettre Ã©galement d'approvisionner les quantitÃ©s de longueur nÃ©cessaire.
+
+![oups](https://github.com/payne63/WpfPipeGenerator/blob/master/Image/pipe.png "Pipe Generator")
