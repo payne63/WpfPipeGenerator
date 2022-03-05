@@ -7,9 +7,14 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="335">
-    <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto"  >
-            <GroupBox Style="{StaticResource MaterialDesignCardGroupBox}" Margin="3" Name="groupBox"  >
+    <Grid >
+        <materialDesign:TransitioningContent>
+            <materialDesign:TransitioningContent.OpeningEffects >
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="SlideInFromBottom" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <ScrollViewer VerticalScrollBarVisibility="Auto"  >
+            <GroupBox Style="{StaticResource MaterialDesignCardGroupBox}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="2" Name="groupBox"  >
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
                         <TextBox 
@@ -63,7 +68,8 @@
                     </StackPanel>
                 </StackPanel>
                 <!--</materialDesign:Card>-->
-            </GroupBox>
-        </ScrollViewer>
+                </GroupBox>
+            </ScrollViewer>
+        </materialDesign:TransitioningContent>
     </Grid>
 </UserControl>

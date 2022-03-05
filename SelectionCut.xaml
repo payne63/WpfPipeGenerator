@@ -7,8 +7,12 @@
              mc:Ignorable="d" MinHeight="50" MinWidth="308" Width="307" Height="50"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Background="{DynamicResource MaterialDesignPaper}">
-
-    <StackPanel Orientation="Horizontal"  >
+    <materialDesign:TransitioningContent>
+        <materialDesign:TransitioningContent.OpeningEffects >
+            <materialDesign:TransitionEffect Kind="FadeIn" />
+            <!--<materialDesign:TransitionEffect Kind="SlideInFromBottom" />-->
+        </materialDesign:TransitioningContent.OpeningEffects>
+        <StackPanel Orientation="Horizontal"  >
         <TextBox Style="{StaticResource MaterialDesignOutlinedTextBox}"
                  materialDesign:HintAssist.Hint="Longueur"
                  materialDesign:HintAssist.HintOpacity="100"
@@ -36,5 +40,6 @@
             <materialDesign:PackIcon Kind="Delete" Height="20" Width="20" />
         </Button>
 
-    </StackPanel>
+        </StackPanel>
+        </materialDesign:TransitioningContent>
 </UserControl>

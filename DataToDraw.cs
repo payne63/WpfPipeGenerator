@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows;
 using System.Windows.Media;
+using MaterialDesignThemes.Wpf.Transitions;
 
 namespace WpfPipeGenerator
 {
@@ -35,21 +36,21 @@ namespace WpfPipeGenerator
         public static void BuildSolution(Panel uiElement)
         {
             uiElement.Children.Clear();
+
             //add Title
-            uiElement.Children.Add(new TextBox()
-            {
-                Text = "Feuille de Débits",
-                HorizontalAlignment = HorizontalAlignment.Center,
-                FontSize = 25,
-                FontStyle = new FontStyle(),
-                Margin = new Thickness(3)
-            });
+
+
+
+
             if (dataToDraws == null) return;
             if (dataToDraws.Count == 0) return;
+            List<StackPanel> PipeStackPanels = new List<StackPanel>();
             foreach (var dataToDraw in dataToDraws)
             {
                 //add description pipe
-                uiElement.Children.Add(new Button()
+                var PipeStackPanel = new StackPanel() { Orientation = Orientation.Vertical };
+                PipeStackPanels.Add(PipeStackPanel);
+                PipeStackPanel.Children.Add(new Button()
                 {
                     Content = dataToDraw.description,
                     FontSize = 20,
@@ -98,10 +99,43 @@ namespace WpfPipeGenerator
                 }
 
                 //add all cuts
-                uiElement.Children.Add(localStackPanel);
-
+                PipeStackPanel.Children.Add(localStackPanel);
 
             }
+            //add Title
+            uiElement.Children.Add
+            (
+                new TransitioningContent()
+                {
+                    OpeningEffects = { new TransitionEffect(TransitionEffectKind.FadeIn), new TransitionEffect(TransitionEffectKind.SlideInFromBottom) },
+                    Content = new TextBox()
+                    {
+                        Text = "Feuille de Débits",
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        FontSize = 20,
+                        FontStyle = new FontStyle(),
+                        Margin = new Thickness(3),
+                        Style = Application.Current.FindResource("MaterialDesignOutlinedTextBox") as Style //MaterialDesignOutlinedTextBox
+                    }
+                }
+            );
+            //add Line of Pipe
+            int timeSpan = 1000;
+            foreach (var PipeStackPanel in PipeStackPanels)
+            {
+                //await Task.Delay(200);
+                uiElement.Children.Add
+                (
+                    new TransitioningContent()
+                    {
+                        OpeningEffects = {  new TransitionEffect(TransitionEffectKind.FadeIn) {  Duration = TimeSpan.FromMilliseconds(timeSpan) },
+                                            new TransitionEffect(TransitionEffectKind.SlideInFromBottom) {Duration = TimeSpan.FromMilliseconds(timeSpan) } },
+                        Content = PipeStackPanel
+                    }
+                ) ;
+                timeSpan+=400;
+            }
         }
+        
     }
 }

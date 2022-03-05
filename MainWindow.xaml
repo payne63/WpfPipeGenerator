@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfPipeGenerator"
-        xmlns:pages="clr-namespace:WpfPipeGenerator.Pages"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:h="http://helix-toolkit.org/wpf"
@@ -88,7 +87,7 @@
                         </Label>
                     </StackPanel>
                 </Button>
-                <ScrollViewer   PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Height="auto" VerticalAlignment="Stretch">
+                <ScrollViewer Margin="4,0,0,0"  PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Height="auto" VerticalAlignment="Stretch">
                     <StackPanel Orientation="Vertical" x:Name="stackPanelPipeRef">
                     </StackPanel>
 

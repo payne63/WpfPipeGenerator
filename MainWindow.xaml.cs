@@ -30,47 +30,25 @@ namespace WpfPipeGenerator
         private DocumentViewer? documentViewer1;
         private readonly PaletteHelper _paletteHelper = new();
 
-        
+
         public MainWindow()
         {
             //var Spath = System.AppDomain.CurrentDomain.BaseDirectory;
 
             InitializeComponent();
             CreateListingEntryCuts();
-            //foreach (var col in  (MaterialDesignColors.PrimaryColor[])Enum.GetValues( typeof(MaterialDesignColors.PrimaryColor)))
-            //{
-            //    var menuItemColor = new MenuItemColor()
-            //    {
-            //        Header = col.ToString(),
-            //        Icon = PackIconKind.Boat,
-            //        primaryColor = col,
-            //    };
-            //    menuItemColor.Click += MenuItemColor_ColorChangedSelected;
-            //    menuItemTheme.Items.Add(menuItemColor);
-
-            //}
+            
             //menuItemTheme.UpdateLayout();
         }
 
-        //private void MenuItemColor_ColorChangedSelected(object? sender, EventArgs e)
-        //{
-        //    Debug.WriteLine(((MenuItemColor)sender).primaryColor.ToString());
-        //    if (sender == null) return;
-        //    ITheme theme = _paletteHelper.GetTheme();
-        //    //theme.PrimaryMid = ((MenuItemColor)sender).primaryColor;
-        //    theme.SetPrimaryColor(System.Windows.Media.Color.FromRgb(200, 0, 0)); //red
-        //    _paletteHelper.SetTheme(theme);
-        //}
+ 
 
         private void CreateListingEntryCuts()
         {
             var listEntryCuts = new ListingEntryCuts();
             listEntryCuts.DeleteMe += ListEntryCuts_DeleteMe;
             stackPanelPipeRef.Children.Add(listEntryCuts);
-            //ITheme theme ;
 
-            //PaletteHelper p = new PaletteHelper();
-            //p.SetTheme(theme);
         }
 
         private void ListEntryCuts_DeleteMe(object? sender, EventArgs e)
@@ -96,7 +74,6 @@ namespace WpfPipeGenerator
         {
             //Set up the WPF Control to be printed
             FrameworkElement controlToPrint = new();
-            //controlToPrint = new HorizontalAxis();
             controlToPrint.DataContext = usefulData;
             controlToPrint.RenderTransform = new ScaleTransform(0.65, 0.65);
 
@@ -144,8 +121,9 @@ namespace WpfPipeGenerator
                     var length = int.Parse(cut.textBoxLength.Text);
                     if (baseLength < length)
                     {
-                        MessageBox.Show("La longueur de coupe est supérieur à la longueur de base. Resolution des découpes impossible", "Erreur",MessageBoxButton.OK, MessageBoxImage.Stop);
-                        DataToDraw.ClearAll();
+                        //MessageBox.Show("La longueur de coupe est supérieur à la longueur de base. Resolution des découpes impossible", "Erreur",MessageBoxButton.OK, MessageBoxImage.Stop);
+                        bool? Result = new MessageBoxCustom("La longueur de coupe est supérieur à la longueur de base.\nCalcul des débits impossible", MessageType.Error, MessageButtons.Ok).ShowDialog();
+                        DataToDraw.ClearAll(); // détruit le rendu de calcul
                         return;
                     }
                     for (int i = 0; i < qt; i++)
@@ -155,12 +133,12 @@ namespace WpfPipeGenerator
 
                 }
 
-                var description = string.IsNullOrEmpty(item.pipeDescription.Text) ? "????" : item.pipeDescription.Text;
+                var description = string.IsNullOrEmpty(item.pipeDescription.Text) ? "sans Description" : item.pipeDescription.Text;
                 var pipeManager = new PipeManager(description, baseLength, listCut);
                 pipeManager.Process();
                 _=new DataToDraw(description, baseLength, pipeManager.GetEnumerable());
                 DataToDraw.BuildSolution(ResolveStackPanel);
-                
+
             }
         }
 
@@ -199,7 +177,8 @@ namespace WpfPipeGenerator
             }
             catch (Exception)
             {
-                MessageBox.Show("impossible d'imprimer", "erreur d'impression", MessageBoxButton.OK, MessageBoxImage.Error);
+                bool? result = new MessageBoxCustom("impossible d'imprimer,\nerreur d'impression", MessageType.Error, MessageButtons.Ok).ShowDialog();
+                //MessageBox.Show("impossible d'imprimer", "erreur d'impression", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             //scroll.ScrollToHome();
@@ -238,15 +217,9 @@ namespace WpfPipeGenerator
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Logiciel de préparation de débit - Version du 01/31/2022", "A propos",MessageBoxButton.OK,MessageBoxImage.Information);
+            bool? result = new MessageBoxCustom("Logiciel de préparation de débit\nVersion du 05/03/2022", MessageType.About, MessageButtons.Ok).ShowDialog();
         }
 
-        //private void MenuITem_Click_ChangeTheme(object sender, RoutedEventArgs e)
-        //{
-        //    ITheme theme = _paletteHelper.GetTheme();
-        //    theme.SetPrimaryColor(System.Windows.Media.Color.FromRgb(200, 0, 0)); //red
-        //    _paletteHelper.SetTheme(theme);
-        //}
 
         private void DarkMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -256,15 +229,6 @@ namespace WpfPipeGenerator
             _paletteHelper.SetTheme(theme);
         }
 
-        //private void ColorPicker_ColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
-        //{
-        //    ITheme theme = _paletteHelper.GetTheme();
-        //    theme.SetPrimaryColor(e.NewValue); //red
-        //    _paletteHelper.SetTheme(theme);
-        //    Debug.WriteLine("color change");
-        //    //BundledTheme b = new();
-        //    //b.PrimaryColor = MaterialDesignColors.PrimaryColor.Red;
-        //}
     }
 
 
