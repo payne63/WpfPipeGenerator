@@ -174,6 +174,7 @@ namespace WpfPipeGenerator
             try
             {
                 printDlg2.PrintVisual(ResolveStackPanel, "Pipe Printing");
+                //teste pour push
             }
             catch (Exception)
             {
