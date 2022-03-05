@@ -23,6 +23,7 @@
     <Compile Remove="DebitData.cs" />
     <Compile Remove="HorizontalAxis.cs" />
     <Compile Remove="HorizontalAxisBase.cs" />
+    <Compile Remove="MenuItemColor.cs" />
     <Compile Remove="PipeCuts.cs" />
     <Compile Remove="Test.cs" />
     <Compile Remove="TestViewModel.cs" />

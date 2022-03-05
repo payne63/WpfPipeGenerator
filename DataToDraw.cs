@@ -35,6 +35,7 @@ namespace WpfPipeGenerator
         public static void BuildSolution(Panel uiElement)
         {
             uiElement.Children.Clear();
+            //add Title
             uiElement.Children.Add(new TextBox()
             {
                 Text = "Feuille de Débits",
@@ -47,6 +48,15 @@ namespace WpfPipeGenerator
             if (dataToDraws.Count == 0) return;
             foreach (var dataToDraw in dataToDraws)
             {
+                //add description pipe
+                uiElement.Children.Add(new Button()
+                {
+                    Content = dataToDraw.description,
+                    FontSize = 20,
+                    Width = 1405,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(2, 10, 2, 0),
+                });
                 var localStackPanel = new StackPanel() { Orientation = Orientation.Vertical, Margin = new Thickness(1) };
                 var counter = 1;
                 foreach (var pipe in dataToDraw.cutLength)
@@ -87,14 +97,7 @@ namespace WpfPipeGenerator
                     counter++;
                 }
 
-                uiElement.Children.Add(new Button()
-                {
-                    Content = dataToDraw.description,
-                    FontSize = 20,
-                    Width = 1405,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Margin = new Thickness(0,10,0,0),
-                });
+                //add all cuts
                 uiElement.Children.Add(localStackPanel);
 
 

@@ -28,12 +28,12 @@ namespace WpfPipeGenerator
     {
 
         private DocumentViewer? documentViewer1;
-        private readonly PaletteHelper _paletteHelper = new PaletteHelper();
+        private readonly PaletteHelper _paletteHelper = new();
 
         
         public MainWindow()
         {
-            var Spath = System.AppDomain.CurrentDomain.BaseDirectory;
+            //var Spath = System.AppDomain.CurrentDomain.BaseDirectory;
 
             InitializeComponent();
             CreateListingEntryCuts();
@@ -85,27 +85,35 @@ namespace WpfPipeGenerator
             ;
         }
 
+        private void PrintClickWPF(object sender, RoutedEventArgs e)
+        {
+            PrintDialog printDlg = new();
+            printDlg.PrintVisual(ResolveStackPanel, "Pipe Printing");
+        }
+
 
         public void CreateMyWPFControlReport(UIElement usefulData) // était HorizontalAxis
         {
             //Set up the WPF Control to be printed
-            FrameworkElement controlToPrint = new FrameworkElement();
+            FrameworkElement controlToPrint = new();
             //controlToPrint = new HorizontalAxis();
             controlToPrint.DataContext = usefulData;
             controlToPrint.RenderTransform = new ScaleTransform(0.65, 0.65);
 
-            FixedDocument fixedDoc = new FixedDocument();
-            PageContent pageContent = new PageContent();
-            FixedPage fixedPage = new FixedPage();
+            FixedDocument fixedDoc = new();
+            PageContent pageContent = new();
+            FixedPage fixedPage = new();
 
             //Create first page of document
             fixedPage.Children.Add(controlToPrint);
             ((System.Windows.Markup.IAddChild)pageContent).AddChild(fixedPage);
             fixedDoc.Pages.Add(pageContent);
             //Create any other required pages here
-            documentViewer1 = new DocumentViewer();
-            //View the document
-            documentViewer1.Document = fixedDoc;
+            documentViewer1 = new DocumentViewer
+            {
+                //View the document
+                Document = fixedDoc
+            };
         }
 
         public void SaveCurrentDocument2()
@@ -150,11 +158,10 @@ namespace WpfPipeGenerator
                 var description = string.IsNullOrEmpty(item.pipeDescription.Text) ? "????" : item.pipeDescription.Text;
                 var pipeManager = new PipeManager(description, baseLength, listCut);
                 pipeManager.Process();
-                new DataToDraw(description, baseLength, pipeManager.GetEnumerable());
+                _=new DataToDraw(description, baseLength, pipeManager.GetEnumerable());
                 DataToDraw.BuildSolution(ResolveStackPanel);
                 
             }
-            //horizontalAxis.InvalidateVisual();
         }
 
         private void ButtonAddListingEntryCutsClick(object sender, RoutedEventArgs e)
@@ -165,8 +172,11 @@ namespace WpfPipeGenerator
         //gestion souris sur le scrollview
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            var scrollViewer = sender as ScrollViewer;
-            if (scrollViewer == null) return;
+            if (sender is not ScrollViewer scrollViewer)
+            {
+                return;
+            }
+
             if (e.Delta > 0)
             {
                 scrollViewer.LineUp();
@@ -182,27 +192,37 @@ namespace WpfPipeGenerator
 
         private void MenuItem_Click_Print(object sender, RoutedEventArgs e)
         {
-            scroll.ScrollToHome();
-            PrintDialog printDlg = new PrintDialog();
-            bool? printResult = printDlg.ShowDialog();
-            if (printResult != null)
+            PrintDialog printDlg2 = new();
+            try
             {
-                bool p = printResult.Value;
-                if (p)
-                {
-                    try
-                    {
-                        FrameworkElement controlToPrint = new FrameworkElement();
-                        controlToPrint.DataContext = ResolveStackPanel;
-                        printDlg.PrintVisual(controlToPrint, "Grid Printing");
-                        //printDlg.PrintVisual(ResolveStackPanel, "Grid Printing.");
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("impossible d'imprimer", "erreur d'impression",MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
+                printDlg2.PrintVisual(ResolveStackPanel, "Pipe Printing");
             }
+            catch (Exception)
+            {
+                MessageBox.Show("impossible d'imprimer", "erreur d'impression", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            //scroll.ScrollToHome();
+            //PrintDialog printDlg = new PrintDialog();
+            //bool? printResult = printDlg.ShowDialog();
+            //if (printResult != null)
+            //{
+            //    bool p = printResult.Value;
+            //    if (p)
+            //    {
+            //        try
+            //        {
+            //            FrameworkElement controlToPrint = new FrameworkElement();
+            //            controlToPrint.DataContext = ResolveStackPanel;
+            //            printDlg.PrintVisual(controlToPrint, "Grid Printing");
+            //            //printDlg.PrintVisual(ResolveStackPanel, "Grid Printing.");
+            //        }
+            //        catch (Exception)
+            //        {
+            //            MessageBox.Show("impossible d'imprimer", "erreur d'impression", MessageBoxButton.OK, MessageBoxImage.Error);
+            //        }
+            //    }
+            //}
         }
 
         private void MenuItem_Click_New(object sender, RoutedEventArgs e)
@@ -236,15 +256,15 @@ namespace WpfPipeGenerator
             _paletteHelper.SetTheme(theme);
         }
 
-        private void ColorPicker_ColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
-        {
-            ITheme theme = _paletteHelper.GetTheme();
-            theme.SetPrimaryColor(e.NewValue); //red
-            _paletteHelper.SetTheme(theme);
-            Debug.WriteLine("color change");
-            BundledTheme b = new BundledTheme();
-            //b.PrimaryColor = MaterialDesignColors.PrimaryColor.Red;
-        }
+        //private void ColorPicker_ColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
+        //{
+        //    ITheme theme = _paletteHelper.GetTheme();
+        //    theme.SetPrimaryColor(e.NewValue); //red
+        //    _paletteHelper.SetTheme(theme);
+        //    Debug.WriteLine("color change");
+        //    //BundledTheme b = new();
+        //    //b.PrimaryColor = MaterialDesignColors.PrimaryColor.Red;
+        //}
     }
 
 
