@@ -177,7 +177,7 @@ namespace WpfPipeGenerator
             }
             catch (Exception)
             {
-                bool? result = new MessageBoxCustom("impossible d'imprimer,\nerreur d'impression", MessageType.Error, MessageButtons.Ok).ShowDialog();
+                _ = new MessageBoxCustom("impossible d'imprimer,\nerreur d'impression", MessageType.Error, MessageButtons.Ok).ShowDialog();
                 //MessageBox.Show("impossible d'imprimer", "erreur d'impression", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
@@ -217,7 +217,7 @@ namespace WpfPipeGenerator
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
         {
-            bool? result = new MessageBoxCustom("Logiciel de préparation de débit\nVersion du 05/03/2022", MessageType.About, MessageButtons.Ok).ShowDialog();
+            _ = new MessageBoxCustom("Logiciel de préparation de débit\nVersion du 05/03/2022", MessageType.About, MessageButtons.Ok).ShowDialog();
         }
 
 
