@@ -44,7 +44,7 @@
                             materialDesign:TextFieldAssist.TextFieldCornerRadius="15"
                             materialDesign:TextFieldAssist.SuffixText="mm"
                             Name="pipeBaseLength" Text="6000"
-                            PreviewTextInput="textBoxLength_PreviewTextInput"
+                            PreviewTextInput="TextBoxLength_PreviewTextInput"
                             />
                         <Button Style="{StaticResource MaterialDesignFlatMidBgButton}"
                             Click="AddNewSelectionCutToList"

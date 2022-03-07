@@ -29,7 +29,7 @@
                     <!--<MenuItem Header="Charger" Icon="{materialDesign:PackIcon Kind=Reload}"/>-->
                     <!--<MenuItem Header="Imprimer" Icon="{materialDesign:PackIcon Kind=Printer}" Click="PrintClick"/>-->
                     <MenuItem Header="Nouveau" Icon="{materialDesign:PackIcon Kind=NewspaperPlus}" Click="MenuItem_Click_New"/>
-                    <MenuItem Header="Imprimer" Icon="{materialDesign:PackIcon Kind=Printer}" Click="MenuItem_Click_Print"/>
+                    <MenuItem Header="Imprimer" Icon="{materialDesign:PackIcon Kind=Printer}" Click="MenuItem_Click_Print2"/>
                     <MenuItem Header="A Propos" Icon="{materialDesign:PackIcon Kind=About}" Click="MenuItem_Click_About"/>
                     <MenuItem Header="Quitter" Icon="{materialDesign:PackIcon Kind=ExitRun}" Click="MenuItem_Click_Quit"/>
                 </MenuItem>

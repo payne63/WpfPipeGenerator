@@ -18,6 +18,8 @@ using System.Windows.Xps.Packaging;
 using PipeCalculator;
 using System.Diagnostics;
 using MaterialDesignThemes.Wpf;
+using System.Windows.Markup;
+using System.Linq;
 
 namespace WpfPipeGenerator
 {
@@ -37,11 +39,11 @@ namespace WpfPipeGenerator
 
             InitializeComponent();
             CreateListingEntryCuts();
-            
+
             //menuItemTheme.UpdateLayout();
         }
 
- 
+
 
         private void CreateListingEntryCuts()
         {
@@ -170,40 +172,78 @@ namespace WpfPipeGenerator
 
         private void MenuItem_Click_Print(object sender, RoutedEventArgs e)
         {
-            PrintDialog printDlg2 = new();
-            try
+            PrintDialog printDlg2 = new() { PageRangeSelection = PageRangeSelection.AllPages, UserPageRangeEnabled = true };
+            bool? printResult = printDlg2.ShowDialog();
+            if (printResult == true)
             {
-                printDlg2.PrintVisual(ResolveStackPanel, "Pipe Printing");
-                //teste pour push
+                try
+                {
+                    printDlg2.PrintVisual(ResolveStackPanel, "Pipe Printing");
+                }
+                catch (Exception)
+                {
+                    bool? result = new MessageBoxCustom("impossible d'imprimer,\nerreur d'impression", MessageType.Error, MessageButtons.Ok).ShowDialog();
+                }
             }
-            catch (Exception)
-            {
-                bool? result = new MessageBoxCustom("impossible d'imprimer,\nerreur d'impression", MessageType.Error, MessageButtons.Ok).ShowDialog();
-                //MessageBox.Show("impossible d'imprimer", "erreur d'impression", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+        }
 
-            //scroll.ScrollToHome();
-            //PrintDialog printDlg = new PrintDialog();
-            //bool? printResult = printDlg.ShowDialog();
-            //if (printResult != null)
+
+        private void MenuItem_Click_Print2(object sender, RoutedEventArgs e)
+        {
+            //var pageSize = new Size(8.26*96*1.78, 22.69*96*1.78);
+            var pageSize = new Size(1412,1998);
+            var fixedDocument = new FixedDocument();
+            fixedDocument.DocumentPaginator.PageSize = pageSize;
+            //scroll.Content = null;
+            UIElement[] elements = new UIElement[ResolveStackPanel.Children.Count];
+            ResolveStackPanel.Children.CopyTo(elements, 0);
+            ResolveStackPanel.Children.Clear();
+
+            
+            var fixedPage = new FixedPage() { Width = pageSize.Width, Height = pageSize.Height };
+            //fixedPage.Measure(pageSize);
+            //fixedPage.Arrange(new Rect(0, 0, pageSize.Width, pageSize.Height));
+            //fixedPage.UpdateLayout();
+            PageContent pageContent;
+            double totalHeight = 0;
+            foreach (var child in elements)
+            {
+                totalHeight += ((FrameworkElement)child).ActualHeight;
+                Debug.WriteLine(totalHeight);
+                if (totalHeight < 500)
+                {
+                    
+                    fixedPage.Children.Add(child);
+                }
+                else
+                {
+                    pageContent = new PageContent();
+                    ((IAddChild)pageContent).AddChild(fixedPage);
+                    fixedDocument.Pages.Add(pageContent);
+                    fixedPage = new FixedPage() { Width = pageSize.Width, Height = pageSize.Height };
+                    //fixedPage.Measure(pageSize);
+                    //fixedPage.Arrange(new Rect(0, 0, pageSize.Width, pageSize.Height));
+                    //fixedPage.UpdateLayout();
+                    fixedPage.Children.Add(child);
+                    totalHeight = ((FrameworkElement)child).ActualHeight;
+                    Debug.WriteLine("new page");
+                }
+            }
+            
+            pageContent = new PageContent();
+            ((IAddChild)pageContent).AddChild(fixedPage);
+            fixedDocument.Pages.Add(pageContent);
+
+            var printDlg = new PrintDialog();
+            printDlg.PrintDocument(fixedDocument.DocumentPaginator, "Impression découpe");
+            //fixedPage.Children.Clear();
+            //foreach (var child in elements)
             //{
-            //    bool p = printResult.Value;
-            //    if (p)
-            //    {
-            //        try
-            //        {
-            //            FrameworkElement controlToPrint = new FrameworkElement();
-            //            controlToPrint.DataContext = ResolveStackPanel;
-            //            printDlg.PrintVisual(controlToPrint, "Grid Printing");
-            //            //printDlg.PrintVisual(ResolveStackPanel, "Grid Printing.");
-            //        }
-            //        catch (Exception)
-            //        {
-            //            MessageBox.Show("impossible d'imprimer", "erreur d'impression", MessageBoxButton.OK, MessageBoxImage.Error);
-            //        }
-            //    }
+            //    ResolveStackPanel.Children.Add(child);
             //}
         }
+
+
 
         private void MenuItem_Click_New(object sender, RoutedEventArgs e)
         {

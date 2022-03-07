@@ -51,8 +51,8 @@ namespace WpfPipeGenerator
 
         private void AddNewSelectionCutToList(object? sender, EventArgs e) => CreateSelectionCut();
 
-        private void textBoxLength_PreviewTextInput(object sender, TextCompositionEventArgs e) => e.Handled = Regex.IsMatch(e.Text, "[^0-9.]+");
-        private void addSelectionCutItem_StartResolve(object sender, EventArgs e)
+        private void TextBoxLength_PreviewTextInput(object sender, TextCompositionEventArgs e) => e.Handled = Regex.IsMatch(e.Text, "[^0-9.]+");
+        private void AddSelectionCutItem_StartResolve(object sender, EventArgs e)
         {
             var listCut = new List<int>();
             foreach (var item in listBoxCuts.Children)
