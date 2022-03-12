@@ -18,6 +18,9 @@ using System.Windows.Xps.Packaging;
 using PipeCalculator;
 using System.Diagnostics;
 using MaterialDesignThemes.Wpf;
+using System.Windows.Markup;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace WpfPipeGenerator
 {
@@ -33,22 +36,17 @@ namespace WpfPipeGenerator
 
         public MainWindow()
         {
-            //var Spath = System.AppDomain.CurrentDomain.BaseDirectory;
-
             InitializeComponent();
             CreateListingEntryCuts();
-            
-            //menuItemTheme.UpdateLayout();
         }
 
- 
+
 
         private void CreateListingEntryCuts()
         {
             var listEntryCuts = new ListingEntryCuts();
             listEntryCuts.DeleteMe += ListEntryCuts_DeleteMe;
             stackPanelPipeRef.Children.Add(listEntryCuts);
-
         }
 
         private void ListEntryCuts_DeleteMe(object? sender, EventArgs e)
@@ -168,41 +166,79 @@ namespace WpfPipeGenerator
             e.Handled = true;
         }
 
+ 
         private void MenuItem_Click_Print(object sender, RoutedEventArgs e)
         {
-            PrintDialog printDlg2 = new();
+            //var pageSize = new Size(8.26*96*1.78, 22.69*96*1.78);
+            var pageSize = new Size(1412,1998);
+            var fixedDocument = new FixedDocument();
+            fixedDocument.DocumentPaginator.PageSize = pageSize;
+            //scroll.Content = null;
+            UIElement[] elements = new UIElement[ResolveStackPanel.Children.Count];
+            ResolveStackPanel.Children.CopyTo(elements, 0);
+            ResolveStackPanel.Children.Clear(); 
+
+            
+            var fixedPage = new FixedPage() { Width = pageSize.Width, Height = pageSize.Height };
+            PageContent pageContent;
+            StackPanel stackPanel = new () { Orientation = Orientation.Vertical ,HorizontalAlignment = HorizontalAlignment.Center};
+            fixedPage.Children.Add(stackPanel);
+
+            double totalHeight = 0;
+            foreach (var child in elements)
+            {
+                totalHeight += ((FrameworkElement)child).ActualHeight;
+                Debug.WriteLine(totalHeight);
+                if (totalHeight < 1950)
+                {
+                    stackPanel.Children.Add(child);
+                }
+                else
+                {
+                    pageContent = new PageContent();
+                    ((IAddChild)pageContent).AddChild(fixedPage);
+                    fixedDocument.Pages.Add(pageContent);
+                    fixedPage = new FixedPage() { Width = pageSize.Width, Height = pageSize.Height };
+
+                    stackPanel = new() { Orientation = Orientation.Vertical, HorizontalAlignment = HorizontalAlignment.Center };
+                    fixedPage.Children.Add(stackPanel);
+
+                    stackPanel.Children.Add(child);
+                    totalHeight = ((FrameworkElement)child).ActualHeight;
+                    Debug.WriteLine("new page");
+                }
+            }
+            
+            pageContent = new PageContent();
+            ((IAddChild)pageContent).AddChild(fixedPage);
+            fixedDocument.Pages.Add(pageContent);
+
+            var printDlg = new PrintDialog();
+            
             try
             {
-                printDlg2.PrintVisual(ResolveStackPanel, "Pipe Printing");
+                printDlg.PrintDocument(fixedDocument.DocumentPaginator, "Impression découpe");
             }
             catch (Exception)
             {
                 _ = new MessageBoxCustom("impossible d'imprimer,\nerreur d'impression", MessageType.Error, MessageButtons.Ok).ShowDialog();
-                //MessageBox.Show("impossible d'imprimer", "erreur d'impression", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            
 
-            //scroll.ScrollToHome();
-            //PrintDialog printDlg = new PrintDialog();
-            //bool? printResult = printDlg.ShowDialog();
-            //if (printResult != null)
-            //{
-            //    bool p = printResult.Value;
-            //    if (p)
-            //    {
-            //        try
-            //        {
-            //            FrameworkElement controlToPrint = new FrameworkElement();
-            //            controlToPrint.DataContext = ResolveStackPanel;
-            //            printDlg.PrintVisual(controlToPrint, "Grid Printing");
-            //            //printDlg.PrintVisual(ResolveStackPanel, "Grid Printing.");
-            //        }
-            //        catch (Exception)
-            //        {
-            //            MessageBox.Show("impossible d'imprimer", "erreur d'impression", MessageBoxButton.OK, MessageBoxImage.Error);
-            //        }
-            //    }
-            //}
+            foreach (var page in fixedDocument.Pages)
+            {
+                foreach (var child in page.Child.Children)
+                {
+                    ((StackPanel)child).Children.Clear();
+                }
+            }
+            foreach (var child in elements)
+            {
+                ResolveStackPanel.Children.Add(child);
+            }
         }
+
+
 
         private void MenuItem_Click_New(object sender, RoutedEventArgs e)
         {
@@ -228,6 +264,9 @@ namespace WpfPipeGenerator
             theme.SetBaseTheme(baseTheme);
             _paletteHelper.SetTheme(theme);
         }
+
+       
+        
 
     }
 
