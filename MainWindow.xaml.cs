@@ -214,7 +214,16 @@ namespace WpfPipeGenerator
             fixedDocument.Pages.Add(pageContent);
 
             var printDlg = new PrintDialog();
-            printDlg.PrintDocument(fixedDocument.DocumentPaginator, "Impression découpe");
+            
+            try
+            {
+                printDlg.PrintDocument(fixedDocument.DocumentPaginator, "Impression découpe");
+            }
+            catch (Exception)
+            {
+                _ = new MessageBoxCustom("impossible d'imprimer,\nerreur d'impression", MessageType.Error, MessageButtons.Ok).ShowDialog();
+            }
+            
 
             foreach (var page in fixedDocument.Pages)
             {
@@ -244,7 +253,7 @@ namespace WpfPipeGenerator
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
         {
-            bool? result = new MessageBoxCustom("Logiciel de préparation de débit\nVersion du 05/03/2022", MessageType.About, MessageButtons.Ok).ShowDialog();
+            _ = new MessageBoxCustom("Logiciel de préparation de débit\nVersion du 05/03/2022", MessageType.About, MessageButtons.Ok).ShowDialog();
         }
 
 
