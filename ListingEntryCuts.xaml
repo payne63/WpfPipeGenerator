@@ -25,7 +25,7 @@
                             materialDesign:TextFieldAssist.LeadingIcon="SquareEditOutline" materialDesign:TextFieldAssist.LeadingIconSize="20"
                             materialDesign:TextFieldAssist.TextFieldCornerRadius="15"
                             Name="pipeDescription"
-                            Margin="0,0,0,4"
+                            Margin="1,2,0,5"
                             />
                         <Button Style="{StaticResource MaterialDesignToolButton}" Margin="10,0,0,0"
                             Click="ButtonDeleteListEntryCuts_Click"
